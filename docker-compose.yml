@@ -1,0 +1,17 @@
+version: "3.7"
+
+services:
+
+  myredis:
+    image: redis
+    ports:
+      - 6379:6379
+
+  app:
+    # image: fibo_server
+    build: ./app
+    ports:
+      - 5000:5000
+
+  worker:
+    build: ./worker

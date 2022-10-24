@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Fibonacci calculator</title>
+  </head>
+
+  <body>
+    <h1>Fibonacci calculator</h1>
+
+    <form id="form">
+      <label for="text">Input: </label>
+      <input type="text" id="n" autofocus>
+      <input type="submit">
+    </form>
+    <br>
+
+    <div id='current_query'><span id="query"></span>: <span id="result"></span><br></div>
+    <br>
+
+    <div id="log"></div>
+
+    <script>
+      const show_result = (result) => {
+        document.getElementById('result').innerHTML = `<span>${result}</span>`;
+      };
+
+      const log = (text) => {
+        document.getElementById('log').innerHTML = text + document.getElementById('log').innerHTML;
+      };
+
+      const socket = new WebSocket('ws://' + location.host + '/fib');
+
+      socket.addEventListener('message', ev => {
+        show_result(ev.data);
+      });
+
+      document.getElementById('form').onsubmit = ev => {
+        ev.preventDefault();
+
+        log(document.getElementById('current_query').innerHTML);
+
+        const n = document.getElementById('n');
+        socket.send(n.value);
+
+        document.getElementById('query').innerHTML = n.value;
+        show_result('calculating...')
+        // textField.value = '';
+      };
+    </script>
+  </body>
+</html>

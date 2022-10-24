@@ -57,7 +57,7 @@ def echo(sock):
             n = ''
         if n:
             job = q.enqueue('fibo.fib', n, job_id=str(n), result_ttl=86400)
-            while not job.result:
+            while job.result == None:
                 job.refresh()
             res = job.result
         sock.send(res)
